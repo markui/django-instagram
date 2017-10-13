@@ -1,10 +1,8 @@
 from django.db import models
 
 
-# Create your models here.
-
 class Post(models.Model):
-    photo = models.ImageField(upload_to='photo')
+    photo = models.ImageField(upload_to='post')
     created_date = models.DateTimeField(auto_now_add=True)
 
 

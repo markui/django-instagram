@@ -22,6 +22,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ROOT_DIR = os.path.dirname(BASE_DIR)
 # instagram_project/.config_secret/
 CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
+# instagram_project/instagram/media/ => 이는 django 내부에서 사용하는 변수
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# instagram_project/instagram/static => 이는 custom 변수이고
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+
 
 # 1. CONFIG_SECRET_DIR 내의 'setting_common.json' 파일을 읽고,
 # 그 결과를 config_secret_common_str 변수에 할당
