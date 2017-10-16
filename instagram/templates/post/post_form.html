@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!--{% if form.errors.non_field_errors %}-->
+<!--{{ form.errors.non_field_errors }}-->
+<!--{% endif %}-->
+<span>업로드할 사진을 선택해주세요.</span>
+<form action="" method="POST" enctype="multipart/form-data">{% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+{% endblock %}

@@ -1,0 +1,30 @@
+<!--Template language의 for구문을 사용해서 각 Post의 photo항목을 출력 (O)-->
+<!--.photo속성의 'url'속성을 사용해서 img태그를 사용 실제 이미지를 보여주기 (O)-->
+
+<!--1. 사진 업로드하기 (O)-->
+<!--2. 사진에 댓글달기 (O)-->
+<!--extra1) urls.py모듈을 post애플리케이션 내부에 생성하고,
+    include를 이용해서 root urls.py모듈에서 사용 (O)-->
+<!--extra2) 사진 댓글 지우기, 사진 지우기 (O)-->
+
+{% extends 'base.html' %}
+{% block content %}
+{% for post in posts %}
+<p>
+    <a href="{{ post.photo.url }}">
+        <img src="{{ post.photo.url }}"/>
+    </a>
+    {% for comment in post.postcomment_set.all %}
+    <p>{{ comment.content }}</p>
+    <form action="{% url 'post:comment_delete' pk=comment.pk %}" method="POST">{% csrf_token %}
+        <button type="submit">X</button>
+    </form>
+    {% endfor %}
+    <form action="{% url 'post:comment_create' pk=post.pk %}" method="POST">{% csrf_token %}
+        <input type="text" name="content" required>
+        <button type="submit">댓글 달기</button>
+    </form>
+
+</p>
+{% endfor %}
+{% endblock %}

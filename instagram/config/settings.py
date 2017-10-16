@@ -14,20 +14,15 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 
-# instagram_project/instagram/
+
 import json
 
+# instagram_project/instagram/
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # instagram_project/
 ROOT_DIR = os.path.dirname(BASE_DIR)
 # instagram_project/.config_secret/
 CONFIG_SECRET_DIR = os.path.join(ROOT_DIR, '.config_secret')
-# instagram_project/instagram/media/ => 이는 django 내부에서 사용하는 변수
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-# instagram_project/instagram/static => 이는 custom 변수이고
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
-
 
 # 1. CONFIG_SECRET_DIR 내의 'setting_common.json' 파일을 읽고,
 # 그 결과를 config_secret_common_str 변수에 할당
@@ -45,6 +40,17 @@ config_secret_common = json.loads(config_secret_common_str)
 # 3.
 SECRET_KEY = config_secret_common['django']['secret_key']
 
+# static의 경우 url부분에서 STATIC_URL, STATICFILES_DIRS가 생략되어있다고 생각하면 됨
+STATIC_URL = '/static/'
+# instagram_project/instagram/static => 이는 custom 변수이고
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+# STATIC_URL로의 요청은 STATICFILES_DIRS 경로의 목록에서 파일을 찾아 리턴
+STATICFILES_DIRS = [
+    STATIC_DIR,
+]
+# instagram_project/instagram/media/ => 이는 django 내부에서 사용하는 변수
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 # instagram_project/instagram/templates
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
@@ -137,20 +143,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/1.11/howto/static-files/
-
-STATIC_URL = '/static/'
-
-
-# Media files
-
-
