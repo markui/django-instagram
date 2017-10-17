@@ -2,7 +2,7 @@
 post_list뷰를 'post/' URL에 할당
 """
 from django.http import HttpResponse
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Post, PostComment
 from .forms import PostForm, PostCommentForm
@@ -55,8 +55,12 @@ def post_create(request):
 
 
 def post_detail(request, post_pk):
-    post = Post.objects.get(pk=post_pk)
-    context = {'post': post}
+    post = get_object_or_404(Post, pk=post_pk)
+    comment_form = PostCommentForm()
+    context = {
+        'post': post,
+        'comment_form': comment_form,
+    }
     return render(request, 'post/post_detail.html', context)
 
 
@@ -68,18 +72,23 @@ def post_delete(request):
     """
 
 
-def post_comment_create(request, pk):
+def post_comment_create(request, post_pk):
     """
     HTTP POST: PostComment 생성하기
     :param request:
     :return:
     """
+    post = get_object_or_404(Post, pk=post_pk)
     if request.method == "POST":
         form = PostCommentForm(request.POST)
         if form.is_valid():
             instance = form.save(commit=False)
-            instance.post = Post.objects.get(pk=pk)
+            instance.post = post
             form.save()
+            next = request.GET.get('next')
+            if next:
+                return redirect(next)
+
 
     return redirect('post:list')
 

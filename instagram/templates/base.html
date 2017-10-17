@@ -10,9 +10,19 @@
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
 </head>
 <body>
-<h1>Instagram</h1>
+<h1><a href="{% url 'post:list' %}">Instagram</a></h1>
+{{ user }}
+<p>
+    {% if user.is_authenticated %}
+        {{ user }} 님, 환영합니다!
+    {% endif %}
+</p>
 <hr>
 {% block content %}
 {% endblock %}
+<script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
 </body>
 </html>
