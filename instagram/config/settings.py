@@ -17,6 +17,8 @@ import os
 
 import json
 
+AUTH_USER_MODEL = 'member.User'
+
 # instagram_project/instagram/
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # instagram_project/

@@ -21,6 +21,7 @@ class UserForm(forms.Form):
     password2 = forms.CharField(
         widget=forms.PasswordInput(),
     )
+
     def clean_username(self):
         data = self.cleaned_data['username']
         if User.objects.filter(username=data).exists():
@@ -41,9 +42,10 @@ class UserForm(forms.Form):
 
     def clean(self):
         if self.is_valid():
+            # 질문1: 무한루프
+            # 질문2: 동적 프로그래밍? 한번 is_valid하면 그 속성(signup) 남아있는거아님?
             setattr(self, 'signup', self._signup)
         return self.cleaned_data
-
 
     def _signup(self):
         """

@@ -2,14 +2,37 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 #  from django.contrib.auth.models import User
 # login view와 겹치므로 django_login으로 import하기
-from django.contrib.auth import get_user_model, authenticate, login as django_login  #
+from django.contrib.auth import (
+    get_user_model,
+    authenticate,
+    login as django_login,
+    logout as django_logout,
+)
 from .forms import UserForm, LoginForm
 
 User = get_user_model()
 
 
 def signup(request):
+    """
     if request.method == "POST":
+        form = UserForm(request.POST)
+        if form.is_valid():
+            form.signup()
+
+
+
+    else:
+        form = UserForm()
+    context = {
+        "form": form
+    }
+    return render(request, 'member/signup.html' ,context)
+    :param request:
+    :return:
+    """
+    if request.method == "POST":
+        # 데이터 바인딩
         form = UserForm(request.POST)
         # User.objects.filter(username=username).exists()
         if form.is_valid():
@@ -26,6 +49,7 @@ def signup(request):
 def login(request):
     # POST요청(form submit)의 경우
     if request.method == 'POST':
+        # form에 data binding
         form = LoginForm(request.POST)
         if form.is_valid():
             form.login(request)
@@ -33,7 +57,11 @@ def login(request):
         else:
             return HttpResponse('Login credentials invalid')
     else:
-        return render(request, 'member/login.html')
+        form = LoginForm()
+        context = {
+            'form': form
+        }
+        return render(request, 'member/login.html', context)
 
         #     password = request.POST['password']
         #     username = request.POST['username']
@@ -55,3 +83,8 @@ def login(request):
         # # GET요청(form submit)의 경우
         # else:
         # return render(request, 'member/login.html')
+
+
+def logout(request):
+    django_logout(request)
+    return redirect('post:list')
