@@ -55,7 +55,9 @@ def post_create(request):
 
 
 def post_detail(request, post_pk):
+
     post = get_object_or_404(Post, pk=post_pk)
+
     comment_form = PostCommentForm()
     context = {
         'post': post,

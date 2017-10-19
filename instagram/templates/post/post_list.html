@@ -10,24 +10,25 @@
 {% extends 'base.html' %}
 {% block content %}
 {% for post in posts %}
-    <div id="{{ post.pk }}">
-        <a href="{% url 'post:detail' post_pk=post.pk %}">
-            <img src="{{ post.photo.url }}"/>
-        </a>
-        <ul id="post-comments-{{ post.pk }}">
-			{% for comment in post.comments.all %}
-			<li>{{ comment.content }}</li>
-			<form action="{% url 'post:comment_delete' pk=comment.pk %}" method="POST">{% csrf_token %}
+<div id="{{ post.pk }}">
+    <a href="{% url 'post:detail' post_pk=post.pk %}">
+        <img src="{{ post.photo.url }}"/>
+    </a>
+    <ul id="post-comments-{{ post.pk }}">
+        {% for comment in post.comments.all %}
+        <li>{{ comment.content }}</li>
+        <form action="{% url 'post:comment_delete' pk=comment.pk %}" method="POST">{% csrf_token %}
             <button type="submit">X</button>
-            </form>
-            {% endfor %}
-        </ul>
-
-        <form action="{% url 'post:comment_create' post_pk=post.pk %}#post-comments-{{ post.pk }}" method="POST">{% csrf_token %}
-            <input type="text" name=
-                    "content" required>
-            <button type="submit">댓글 달기</button>
         </form>
-    </div>
+        {% endfor %}
+    </ul>
+
+    <form action="{% url 'post:comment_create' post_pk=post.pk %}#post-comments-{{ post.pk }}" method="POST">{%
+        csrf_token %}
+        <input type="text" name=
+                "content" required>
+        <button type="submit">댓글 달기</button>
+    </form>
+</div>
 {% endfor %}
 {% endblock %}
