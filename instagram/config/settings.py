@@ -17,8 +17,6 @@ import os
 
 import json
 
-AUTH_USER_MODEL = 'member.User'
-
 # instagram_project/instagram/
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # instagram_project/
@@ -69,6 +67,8 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+AUTH_USER_MODEL = 'member.User'
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -77,12 +77,15 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+
     # 3rd-party package
     'django_extensions',
 
     # Custom
-    'post',
     'member',
+    'post',
+
+
 
 ]
 

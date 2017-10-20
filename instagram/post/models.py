@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+
 class HasAuthorManager(models.Manager):
     def get_queryset(self):
         return super().get_queryset().filter(author__isnull=False)
@@ -8,7 +9,6 @@ class HasAuthorManager(models.Manager):
 
 class Post(models.Model):
     objects = HasAuthorManager()
-
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -35,4 +35,4 @@ class PostComment(models.Model):
         related_name='comments'
     )
     content = models.TextField()
-    created_date = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)

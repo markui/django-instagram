@@ -56,7 +56,7 @@ class UserForm(forms.Form):
             username=self.cleaned_data['username'],
             password=self.cleaned_data['password'],
         )
-        print(f'{user.username} : {user.password}')
+        # print(f'{user.username} : {user.password}')
 
         # class Meta:
         #     model = User

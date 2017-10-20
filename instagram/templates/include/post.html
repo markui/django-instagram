@@ -1,0 +1,30 @@
+<div id="{{ post.pk }}">
+    <p>{{ post.author }}님이 {{ post.created_at }}에 작성하신 포스트입니다</p>
+    <form action="{% url 'post:delete' pk=post.pk %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">X</button>
+    </form>
+    {% if post.photo %}
+    <a href="{% url 'post:detail' post_pk=post.pk %}">
+        <img src="{{ post.photo.url }}"/>
+    </a>
+    <ul id="post-comments-{{ post.pk }}">
+        {% for comment in post.comments.all %}
+        <li>{{ comment.content }}</li>
+        <form action="{% url 'post:comment_delete' pk=comment.pk %}" method="POST">
+            {% csrf_token %}
+            <button type="submit">X</button>
+        </form>
+        {% endfor %}
+    </ul>
+
+    <form action="{% url 'post:comment_create' post_pk=post.pk %}{{ next }}{{ next_post_pk }}{{ after_comment_view }}{{ comment_id }}"
+          method="POST">
+        {% csrf_token %}
+        <input type="text" name="content" required>
+        <button type="submit">댓글 달기</button>
+    </form>
+    {% else %}
+    <h3>이미지 파일이 없습니다</h3>
+    {% endif %}
+</div>

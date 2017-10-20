@@ -7,28 +7,21 @@
     include를 이용해서 root urls.py모듈에서 사용 (O)-->
 <!--extra2) 사진 댓글 지우기, 사진 지우기 (O)-->
 
+
+<!--
+1. 작성자 username나오게
+2. Post를 나타내는 HTML요소를 include/post.html로 분리해서 사용
+3. Post 및 Comment삭제 기능 추가(작성한 유저만 가능하도록)
+-->
+
+<!--1. post를 작성한 작성자(author)의 username을 template에서 표시하도록 만들기-->
+<!--2. post를 나타내는 HTML 요소를 include/post.html로 분리해서 post_list, post_detail에서 include 하여 나타내기-->
+<!--3. post와 comment를 삭제할 수 있는 기능 추가 (해당 post나 comment의 작성자인 경우에만 삭제가 가능하도록 하기)-->
+
 {% extends 'base.html' %}
 {% block content %}
 {% for post in posts %}
-<div id="{{ post.pk }}">
-    <a href="{% url 'post:detail' post_pk=post.pk %}">
-        <img src="{{ post.photo.url }}"/>
-    </a>
-    <ul id="post-comments-{{ post.pk }}">
-        {% for comment in post.comments.all %}
-        <li>{{ comment.content }}</li>
-        <form action="{% url 'post:comment_delete' pk=comment.pk %}" method="POST">{% csrf_token %}
-            <button type="submit">X</button>
-        </form>
-        {% endfor %}
-    </ul>
-
-    <form action="{% url 'post:comment_create' post_pk=post.pk %}#post-comments-{{ post.pk }}" method="POST">{%
-        csrf_token %}
-        <input type="text" name=
-                "content" required>
-        <button type="submit">댓글 달기</button>
-    </form>
-</div>
+    {% include 'include/post.html' with after_comment_view='#post-comments-' comment_id=post.pk  %}
 {% endfor %}
 {% endblock %}
+#post-comments-{{ post.pk }}

@@ -1,19 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div>
-    {% if post.photo %}
-    <img src="{{ post.photo.url }}">
-    {% for comment in post.comments.all %}
-    <p>{{ comment.content }}</p>
-    {% endfor %}
-    <!--같은 기능을 하는데, 다른 url로 이동시키고 싶은 경우 GET Parameter 사용-->
-    <form action="{% url 'post:comment_create' post_pk=post.pk %}?next=/post/{{ post.pk }}" method="POST">{% csrf_token %}
-        {{ comment_form.as_p }}
-        <button type="submit">댓글 달기</button>
-    </form>
-    {% else %}
-    <h3>이미지 파일이 없습니다</h3>
-    {% endif %}
-</div>
+    {% include 'include/post.html' with next='?next=/post/' next_post_pk=post.pk after_comment_view='#post-comments-' comment_id=post.pk %}
 {% endblock %}
+
+

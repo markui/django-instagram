@@ -3,7 +3,8 @@
 <!--{% if form.errors.non_field_errors %}-->
 <!--{{ form.errors.non_field_errors }}-->
 <!--{% endif %}-->
-<form action="" method="POST">{% csrf_token %}
+<form action="" method="POST">
+    {% csrf_token %}
     <!--{{ form.username.label_tag }}-->
     <!--{{ form.username }}-->
     <!--{{ form.password }}-->

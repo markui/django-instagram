@@ -37,6 +37,7 @@ def signup(request):
         # User.objects.filter(username=username).exists()
         if form.is_valid():
             form.signup()
+            return redirect('post:list')
 
     else:
         form = UserForm()

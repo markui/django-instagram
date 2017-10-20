@@ -13,7 +13,9 @@ class UserManager(DjangoUserManager):
 
 class User(AbstractUser):
     img_profile = models.ImageField(upload_to='user', blank=True)
-    age = models.IntegerField()
+    # age = models.IntegerField()
+
 
     objects = UserManager()
     # REQUIRED_FIELDS = AbstractUser.REQUIRED_FIELDS + ['age']
+
