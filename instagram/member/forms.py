@@ -1,5 +1,6 @@
 from django import forms
 # from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
 
 from .validators import validate_username
@@ -8,68 +9,80 @@ from django.contrib.auth import get_user_model, authenticate, login as django_lo
 User = get_user_model()
 
 
-class UserForm(forms.Form):
-    username = forms.CharField(
-        widget=forms.TextInput(),
-        validators=[validate_username]
-    )
+# class UserForm(forms.Form):
+#     username = forms.CharField(
+#         widget=forms.TextInput(),
+#         validators=[validate_username]
+#     )
+#
+#     password = forms.CharField(
+#         widget=forms.PasswordInput(),
+#     )
+#
+#     password2 = forms.CharField(
+#         widget=forms.PasswordInput(),
+#     )
+#
+#     def clean_username(self):
+#         data = self.cleaned_data['username']
+#         if User.objects.filter(username=data).exists():
+#             raise forms.ValidationError('The username is already taken!')
+#         return data
+#
+#     def clean_password2(self):
+#         """
+#         password, password2의 값이 같은지 비교
+#         다르면 raise forms.ValidationError
+#         :return:
+#         """
+#         password = self.cleaned_data['password']
+#         password2 = self.cleaned_data['password2']
+#         if password != password2:
+#             raise forms.ValidationError("The two passwords are not in sync")
+#         return password
+#
+#     def clean(self):
+#         if self.is_valid():
+#             # 질문1: 무한루프
+#             # 질문2: 동적 프로그래밍? 한번 is_valid하면 그 속성(signup) 남아있는거아님?
+#             setattr(self, 'signup', self._signup)
+#         return self.cleaned_data
+#
+#     def _signup(self):
+#         """
+#         User를 생성
+#         :return:
+#         """
+#         user = User.objects.create_user(
+#             username=self.cleaned_data['username'],
+#             password=self.cleaned_data['password'],
+#         )
+#         return user
 
-    password = forms.CharField(
-        widget=forms.PasswordInput(),
-    )
 
-    password2 = forms.CharField(
-        widget=forms.PasswordInput(),
-    )
-
-    def clean_username(self):
-        data = self.cleaned_data['username']
-        if User.objects.filter(username=data).exists():
-            raise forms.ValidationError('The username is already taken!')
-        return data
-
-    def clean_password2(self):
-        """
-        password, password2의 값이 같은지 비교
-        다르면 raise forms.ValidationError
-        :return:
-        """
-        password = self.cleaned_data['password']
-        password2 = self.cleaned_data['password2']
-        if password != password2:
-            raise forms.ValidationError("The two passwords are not in sync")
-        return password
-
-    def clean(self):
-        if self.is_valid():
-            # 질문1: 무한루프
-            # 질문2: 동적 프로그래밍? 한번 is_valid하면 그 속성(signup) 남아있는거아님?
-            setattr(self, 'signup', self._signup)
-        return self.cleaned_data
-
-    def _signup(self):
-        """
-        User를 생성
-        :return:
-        """
-        user = User.objects.create_user(
-            username=self.cleaned_data['username'],
-            password=self.cleaned_data['password'],
+class UserForm(UserCreationForm):
+    # bootstrap
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     # 초기화 과정에서 attrs를 업데이트할 필드 이름 목록
+    #     class_update_fields = ('password1', 'password2')
+    #     for field in class_update_fields:
+    #         self.fields[field].widget.attrs.update({
+    #             'class': 'form-control',
+    #         })
+    class Meta:
+        model = User
+        fields = (
+            'username',
+            # 'password2',
+            # 'password1',
+            'img_profile',
         )
-        # print(f'{user.username} : {user.password}')
 
-        # class Meta:
-        #     model = User
-        #     fields = [
-        #         'username',
-        #         'password',
-        #     ]
-
-        # def clean_username(self):
-        #     data = self.cleaned_data['username']
-        #     if User.objects.filter(username=data).exists():
-        #         raise forms.ValidationError('The username is taken!')
-        #     return data
+        # bootstrap
+        # widgets = {
+        #     'username': forms.TextInput
+        # }
 
 
 class LoginForm(forms.Form):

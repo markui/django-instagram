@@ -1,7 +1,7 @@
 """
 post_list뷰를 'post/' URL에 할당
 """
-
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -51,11 +51,14 @@ def post_create(request):
         form = PostForm(request.POST, request.FILES)
         # form 생성과정에서 전달된 데이터들이 Form의 모든 field들에 유효한지 검사
         if form.is_valid():
-            photo = form.cleaned_data.get('photo')
-            Post.objects.create(
-                author=request.user,
-                photo=photo
-            )
+            # 유효할 경우 Post인스턴스 생성 및 저장
+            # 1. 커스텀 메서드 사용
+            # form.save(author=request.user)
+
+            # 2. 기존 Django의 ModelForm방식 사용
+            post = form.save(commit=False)
+            post.author = request.user
+            post.save()
             return redirect('post:list')
         # form의 field가 하나라도 유효하지 않은 경우
         else:
@@ -78,13 +81,18 @@ def post_delete(request, pk):
     :param request:
     :return:
     """
-    if not request.user.is_authenticated:
-        return redirect('post:list')
+    # if not request.user.is_authenticated:
+    #     return redirect('post:list')
 
     if request.method == "POST":
-        post = Post.objects.get(pk=pk)
-        if request.user == post.author:
+        post = get_object_or_404(Post, pk=pk)
+        if post.author == request.user:
             post.delete()
+            next = request.GET.get('next', '').strip()
+            if next:
+                return redirect(next)
+        else:
+            raise PermissionDenied('작성자가 아닙니다')
 
     return redirect('post:list')
 
@@ -109,7 +117,10 @@ def post_comment_create(request, post_pk):
             instance.post = post
             instance.author = request.user
             instance.save()
-            next = request.GET.get('next')
+            # GET parameter로 next 값이 전달되면
+            # 다음에 갈 URL (next)가 빈 문자열이 아닌 경우
+            next = request.GET.get('next', '').strip()
+            print(next)
             if next:
                 return redirect(next)
 
@@ -122,12 +133,14 @@ def post_comment_delete(request, pk):
     :param request:
     :return:
     """
-    if not request.user.is_authenticated:
-        return redirect('post:list')
-
     if request.method == "POST":
-        comment = PostComment.objects.get(pk=pk)
-        if request.user == comment.author:
+        comment = get_object_or_404(PostComment, pk=pk)
+        if comment.author == request.user:
             comment.delete()
+            next = request.GET.get('next', '').strip()
+            if next:
+                return redirect(next)
+        else:
+            raise PermissionDenied('작성자가 아닙니다')
 
     return redirect('post:list')

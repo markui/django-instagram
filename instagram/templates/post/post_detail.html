@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% include 'include/post.html' with next='?next=/post/' next_post_pk=post.pk after_comment_view='#post-comments-' comment_id=post.pk %}
+    {% include 'include/post.html' with post_type='detail' %}
 {% endblock %}
 
 

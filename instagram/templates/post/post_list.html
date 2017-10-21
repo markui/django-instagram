@@ -21,7 +21,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {% for post in posts %}
-    {% include 'include/post.html' with after_comment_view='#post-comments-' comment_id=post.pk  %}
+    {% include 'include/post.html' with post_type='list'  %}
 {% endfor %}
 {% endblock %}
 #post-comments-{{ post.pk }}

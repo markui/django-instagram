@@ -32,11 +32,14 @@ def signup(request):
     :return:
     """
     if request.method == "POST":
-        # 데이터 바인딩
+        # form에 데이터 바인딩
         form = UserForm(request.POST)
         # User.objects.filter(username=username).exists()
         if form.is_valid():
-            form.signup()
+            # user = form.signup()
+            user = form.save()
+            # 회원가입이 완료된 후 해당 유저를 login 시킴
+            django_login(request, user)
             return redirect('post:list')
 
     else:
