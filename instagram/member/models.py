@@ -20,14 +20,24 @@ class User(AbstractUser):
         upload_to='user',
         blank=True)
     # age = models.IntegerField()
+
     like_posts = models.ManyToManyField(
-        'post.Post',  # 바로 앱에서 갖고 올 수 있음
+        'post.Post',
         related_name='liked_users',
         verbose_name='좋아요 누른 포스트 목록'
     )
 
+    # 포스트 좋아요를 하기
     def like_post(self, post):
         self.like_posts.add(post)
+
+    # 포스트 좋아요를 취소하기
+    def dislike_post(self, post):
+        self.like_posts.remove(post)
+
+    # 포스트 좋아요가 이미 되어 있는지를 검사하기
+    def has_liked_post(self, post):
+        return self.like_posts.filter(pk=post.pk).exists()
 
     objects = UserManager()
 

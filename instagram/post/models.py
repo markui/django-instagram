@@ -18,6 +18,13 @@ class Post(models.Model):
     photo = models.ImageField(upload_to='post')
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.author.username + '-' + self.photo.name.split('post/')[-1]
+
+    @property
+    def total_likes(self):
+        return self.liked_users.count()
+
     class Meta:
         ordering = ['-created_at']
 

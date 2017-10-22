@@ -1,5 +1,7 @@
 <div id="{{ post.pk }}">
     <p>{{ post.author }}님이 {{ post.created_at }}에 작성하신 포스트입니다</p>
+    <i class="heart fa fa-heart-o" name="{{ post.pk }}" aria-hidden="true"></i>
+    <span id="{{ post.pk }}-total-likes">좋아요 수: {{ post.total_likes }}</span>
     {% if post.author == user %}
     <form action="{% url 'post:delete' pk=post.pk %}?next=
     {% if post_type == 'list' %}
@@ -38,7 +40,7 @@
     {% elif post_type == 'detail' %}
      {% url 'post:detail' post_pk=post.pk %}
     {% endif %}"
-    method="POST">
+          method="POST">
         {% csrf_token %}
         <input type="text" name="content" required>
         <button type="submit">댓글 달기</button>

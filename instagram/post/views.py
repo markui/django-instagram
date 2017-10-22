@@ -2,6 +2,7 @@
 post_list뷰를 'post/' URL에 할당
 """
 from django.core.exceptions import PermissionDenied
+import json
 from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -94,7 +95,26 @@ def post_delete(request, pk):
         else:
             raise PermissionDenied('작성자가 아닙니다')
 
-    return redirect('post:list')
+
+def post_like(request):
+    user = request.user
+    if not user.is_authenticated:
+        return None
+
+    if request.method == "POST":
+        pk = request.POST.get('pk')
+        post = Post.objects.get(pk=pk)
+        # 만약 user가 like 하지 않은 post라면, like 하기
+        if not user.has_liked_post(post):
+            user.like_post(post)
+        # 만약 user가 이미 like 한 post라면, like 취소
+        else:
+            user.dislike_post(post)
+
+        context = {
+            'like_count': post.total_likes
+        }
+        return HttpResponse(json.dumps(context), content_type="application/json")
 
 
 def post_comment_create(request, post_pk):

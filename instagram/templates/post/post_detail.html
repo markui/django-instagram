@@ -2,6 +2,46 @@
 
 {% block content %}
     {% include 'include/post.html' with post_type='detail' %}
+<script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+<script>
+<script
+        src="https://code.jquery.com/jquery-3.2.1.min.js"
+        integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+        crossorigin="anonymous"></script>
+<script>
+
+var heart = $('.heart')
+
+// 하트 클릭 시,
+heart.click(function() {
+    // 색깔 채워넣기/비우기
+    $(this).toggleClass("fa-heart-o fa-heart")
+
+    // 해당 post pk 가져오기
+    var pk = $(this).attr('name')
+
+    // ajax post reqeust 보내기
+    $.ajax({
+        type: "POST",
+        url: "{% url 'post:like' %}",
+        data: {'pk': pk, 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        success: function(response){
+            var totalLikeEl = $('#' + pk + '-total-likes');
+            var totalLikeNum = totalLikeEl.text()
+            totalLikeEl.html('좋아요 수: ' + response.like_count)
+        },
+        error: function(response){
+            alert("로그인이 필요합니다.");
+            window.location.replace("/member/login/")
+
+        }
+    });
+})
+
+</script>
 {% endblock %}
 
 
