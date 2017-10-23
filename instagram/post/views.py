@@ -103,7 +103,7 @@ def post_like(request):
 
     if request.method == "POST":
         pk = request.POST.get('pk')
-        post = Post.objects.get(pk=pk)
+        post = get_object_or_404(pk=pk)
         # 만약 user가 like 하지 않은 post라면, like 하기
         if not user.has_liked_post(post):
             user.like_post(post)
