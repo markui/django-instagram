@@ -40,6 +40,11 @@ config_secret_common = json.loads(config_secret_common_str)
 # 3.
 SECRET_KEY = config_secret_common['django']['secret_key']
 
+# Facebook
+FACEBOOK_APP_ID = config_secret_common['facebook']['app_id']
+FACEBOOK_APP_SECRET_CODE = config_secret_common['facebook']['secret_code']
+FACEBOOK_SCOPE = ['user_friends', 'public_profile', 'email']
+
 # static의 경우 url부분에서 STATIC_URL, STATICFILES_DIRS가 생략되어있다고 생각하면 됨
 STATIC_URL = '/static/'
 # instagram_project/instagram/static => 이는 custom 변수이고
@@ -77,15 +82,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-
     # 3rd-party package
     'django_extensions',
 
     # Custom
     'member',
     'post',
-
-
 
 ]
 

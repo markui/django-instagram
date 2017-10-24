@@ -1,6 +1,10 @@
 <div id="{{ post.pk }}">
     <p>{{ post.author }}님이 {{ post.created_at }}에 작성하신 포스트입니다</p>
+    {% if user in post.liked_users.all %}
+    <i class="heart fa fa-heart" name="{{ post.pk }}" aria-hidden="true"></i>
+    {% else %}
     <i class="heart fa fa-heart-o" name="{{ post.pk }}" aria-hidden="true"></i>
+    {% endif %}
     <span id="{{ post.pk }}-total-likes">좋아요 수: {{ post.total_likes }}</span>
     {% if post.author == user %}
     <form action="{% url 'post:delete' pk=post.pk %}?next=

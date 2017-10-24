@@ -49,8 +49,9 @@ heart.click(function() {
             var totalLikeNum = totalLikeEl.text()
             totalLikeEl.html('좋아요 수: ' + response.like_count)
         },
-        error: function(response){
+        error: function(response, url){
             alert("로그인이 필요합니다.");
+            console.log(response)
             window.location.replace("/member/login/")
 
         }

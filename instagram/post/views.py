@@ -1,6 +1,7 @@
 """
 post_list뷰를 'post/' URL에 할당
 """
+# from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 import json
 from django.http import HttpResponse
@@ -8,6 +9,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 
 from .models import Post, PostComment
 from .forms import PostForm, PostCommentForm
+from .decorators import login_required
 
 
 def post_list(request):
@@ -33,7 +35,7 @@ def post_detail(request, post_pk):
     }
     return render(request, 'post/post_detail.html', context)
 
-
+@login_required
 def post_create(request):
     """
     HTTP GET: Post를 생성하는 빈 form을 보여주기
@@ -44,8 +46,8 @@ def post_create(request):
     :param request:
     :return:
     """
-    if not request.user.is_authenticated:
-        return redirect('member:login')
+    # if not request.user.is_authenticated:
+    #     return redirect('member:login')
 
     if request.method == "POST":
         # POST 요청의 경우 PostForm 인스턴스 생성과정에서 request.POST, request.FILES를 사용
@@ -66,7 +68,7 @@ def post_create(request):
             print('Form is invalid!')
 
     # GET 요청에선 이부분이 무조건 실행
-    # POST요청에선 form.is_valid()를 통과하지 못하면 이부분이 실행
+    # POST요청에선 form.is_valid()를통과하지 못하면 이부분이 실행
     else:
         form = PostForm()
 
@@ -96,14 +98,16 @@ def post_delete(request, pk):
             raise PermissionDenied('작성자가 아닙니다')
 
 
+@login_required
 def post_like(request):
-    user = request.user
-    if not user.is_authenticated:
-        return None
+    # user = request.user
+    # if not user.is_authenticated:
+    #     return HttpResponse(status=403)
 
     if request.method == "POST":
+        user = request.user
         pk = request.POST.get('pk')
-        post = get_object_or_404(pk=pk)
+        post = get_object_or_404(Post, pk=pk)
         # 만약 user가 like 하지 않은 post라면, like 하기
         if not user.has_liked_post(post):
             user.like_post(post)
