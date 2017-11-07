@@ -84,7 +84,8 @@ INSTALLED_APPS = [
 
     # 3rd-party package
     'django_extensions',
-
+    'rest_framework',
+    
     # Custom
     'member',
     'post',

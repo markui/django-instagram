@@ -17,6 +17,8 @@ from django.conf import settings
 from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
+
+from post.apis import PostList
 from .views import index
 
 urlpatterns = [
@@ -24,6 +26,8 @@ urlpatterns = [
     url(r'^$', index, name='index'),
     url(r'^post/', include('post.urls')),
     url(r'^member/', include('member.urls')),
+
+    url(r'^api/post/$', PostList.as_view(), name='api-post'),
 ]
 urlpatterns += static(
     settings.MEDIA_URL,

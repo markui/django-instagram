@@ -123,9 +123,16 @@ def facebook_login(request):
         type: str
         user_id: str
 
+    class UserInfo:
+        def __init__(self, data):
+            self.facebook_id = data['id']
+            self.email = data.get('email', '')
+            self.url_picture = data['picture']['data']['url']
+
     app_id = settings.FACEBOOK_APP_ID
     app_secret_code = settings.FACEBOOK_APP_SECRET_CODE
     app_access_token = f'{app_id}|{app_secret_code}'
+    # request Token 받아오기
     code = request.GET.get('code')
 
     def get_access_token_info(code_value):
@@ -163,10 +170,12 @@ def facebook_login(request):
         response = requests.get(url_debug_token, params_debug_token)
         return DebugTokenInfo(**response.json()['data'])
 
-    # 전달받은 code값으로 AccessTokenInfo namedtuple을 반환
+    # 전달받은 code값(Request Token)으로 AccessTokenInfo namedtuple을 반환
     access_token_info = get_access_token_info(code)
+    print(access_token_info)
     # namedtuple에서 'access_token'속성의 값을 가져옴
     access_token = access_token_info.access_token
+    print(access_token)
     # DebugTokenInfo 가져오기
     debug_token_info = get_debug_token_info(access_token)
     print(debug_token_info)
@@ -176,7 +185,7 @@ def facebook_login(request):
         'id',
         'name',
         'picture',
-        # 'email',
+        'friends',
     ]
 
     url_graph_user_info = 'https://graph.facebook.com/me'
