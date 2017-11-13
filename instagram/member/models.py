@@ -1,12 +1,9 @@
-from django.db import models
-
 from django.contrib.auth.models import (
     AbstractUser,
     UserManager,
     # UserManager as DjangoUserManager
 )
-
-from post.models import Post
+from django.db import models
 
 
 # class UserManager(DjangoUserManager):

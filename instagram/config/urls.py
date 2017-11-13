@@ -18,7 +18,8 @@ from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 
-from post.apis import PostList
+from member.apis import Login, Signup
+from post.apis import PostList, PostDetail
 from .views import index
 
 urlpatterns = [
@@ -28,7 +29,12 @@ urlpatterns = [
     url(r'^member/', include('member.urls')),
 
     url(r'^api/post/$', PostList.as_view(), name='api-post'),
+    url(r'^api/post/(?P<pk>\d+)/$', PostDetail.as_view(), name='api-post-detail'),
+
+    url(r'^api/member/login/$', Login.as_view(), name='api-login'),
+    url(r'^api/member/signup/$', Signup.as_view(), name='api-signup'),
 ]
+
 urlpatterns += static(
     settings.MEDIA_URL,
     document_root=settings.MEDIA_ROOT,

@@ -74,6 +74,14 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'member.User'
 
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    )
+}
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -85,6 +93,7 @@ INSTALLED_APPS = [
     # 3rd-party package
     'django_extensions',
     'rest_framework',
+    'rest_framework.authtoken',
     
     # Custom
     'member',

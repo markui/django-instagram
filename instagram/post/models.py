@@ -19,7 +19,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.author.username + '-' + self.photo.name.split('post/')[-1]
+        return self.photo.name.split('post/')[-1]
 
     @property
     def total_likes(self):
