@@ -10,11 +10,11 @@
 #           기존 urls모듈에 있던 내용은 urls/views.py로 이동
 #           apis에 있던 내용은 urls/apis.py에 작성
 #
-from django.http import Http404
-from rest_framework import status, generics, mixins
+from rest_framework import generics, mixins, permissions
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
+from member.serializers import UserSerializer
+from utils.permissions import IsAuthorOrReadOnly
 from .models import Post
 from .serializers import PostSerializer
 
@@ -39,29 +39,72 @@ class PostList(mixins.ListModelMixin,
 # APIView를 사용
 
 # GET, PUT, DELETE
-class PostDetail(APIView):
-    def get_object(self, pk):
-        try:
-            post = Post.objects.get(pk=pk)
-        except post.DoesNotExist:
-            raise Http404
+# class PostDetail(APIView):
+#     def get_object(self, pk):
+#         try:
+#             post = Post.objects.get(pk=pk)
+#         except post.DoesNotExist:
+#             raise Http404
+#
+#         return post
+#
+#     def get(self, request, pk, format=None):
+#         post = self.get_object(pk)
+#         serializer = PostSerializer(post)
+#         return Response(serializer.data)
+#
+#     def put(self, request, pk, format=None):
+#         post = self.get_object(pk)
+#         serializer = PostSerializer(post, data=request.data)
+#         if serializer.is_valid():
+#             serializer.save(author=request.user)
+#             return Response(serializer.data)
+#         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+#
+#     def delete(self, request, pk, format=None):
+#         post = self.get_object(pk)
+#         post.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
+#
+#
+class PostList(generics.ListCreateAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = (
+        permissions.IsAuthenticatedOrReadOnly,
+    )
 
-        return post
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
-    def get(self, request, pk, format=None):
-        post = self.get_object(pk)
-        serializer = PostSerializer(post)
-        return Response(serializer.data)
 
-    def put(self, request, pk, format=None):
-        post = self.get_object(pk)
-        serializer = PostSerializer(post, data=request.data)
-        if serializer.is_valid():
-            serializer.save(author=request.user)
-            return Response(serializer.data)
-        return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST)
+class PostDetail(generics.RetrieveDestroyAPIView):
+    queryset = Post.objects.all()
+    serializer_class = PostSerializer
+    permission_classes = (
+        IsAuthorOrReadOnly,
+    )
 
-    def delete(self, request, pk, format=None):
-        post = self.get_object(pk)
-        post.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+
+class PostLikeToggle(generics.GenericAPIView):
+    queryset = Post.objects.all()
+
+    # self.get_object() <- GenericAPIView에 이미 구현되어 있음
+    # lookup_url_kwarg = 'post_pk' => default는 pk임
+    # url패턴에서 특정 Post instance를 가져오기 위한 그룹명
+    def post(self, request, *args, **kwargs):
+        instance = self.get_object()
+        user = request.user
+        # 이미 유저의 like_posts목록에 현재 post(instance)가 존재할 경우
+        if user.like_posts.filter(pk=instance.pk):
+            user.like_posts.remove(instance)
+            like_status = False
+        else:
+            user.like_posts.add(instance)
+            like_status = True
+        data = {
+            'user': UserSerializer(user).data,
+            'post': PostSerializer(instance).data,
+            'result': like_status,
+        }
+        return Response(data)

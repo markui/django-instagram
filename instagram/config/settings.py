@@ -10,12 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
+import json
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-
-
-import json
 
 # instagram_project/instagram/
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -74,13 +72,19 @@ ALLOWED_HOSTS = []
 
 AUTH_USER_MODEL = 'member.User'
 
-
 REST_FRAMEWORK = {
+    # DRF Authentication
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     )
 }
+
+# 기본 인증 백엔드에 페이스북 인증 백엔드를 추가함
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'member.backends.FacebookBackend',
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -94,7 +98,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
-    
+
     # Custom
     'member',
     'post',

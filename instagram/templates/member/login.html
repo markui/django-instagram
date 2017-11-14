@@ -13,7 +13,9 @@
 <a href="https://www.facebook.com/v2.10/dialog/oauth?
   client_id={{ facebook_app_id }}&
   scope={{ facebook_scope|join:',' }}&
-  redirect_uri={{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'member:facebook_login' %}">페이스북 로그인</a>
+  redirect_uri={{ request.scheme }}://{{ request.META.HTTP_HOST }}{% url 'member:front-facebook-login' %}">페이스북 로그인</a>
 <!--동적 redirect_uri를 위해서-->
+<!--request.scheme: http-->
+<!--request.META.HTTP_HOST: localhost:8000-->
 <a href="{% url 'member:signup' %}">회원가입</a>
 {% endblock %}

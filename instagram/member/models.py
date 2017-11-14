@@ -9,6 +9,7 @@ from django.db import models
 # class UserManager(DjangoUserManager):
 #     def create_superuser(self, *args, **kwargs):
 #         return super().create_superuser(age=30, *args, **kwargs)
+from rest_framework.authtoken.models import Token
 
 
 class User(AbstractUser):
@@ -87,6 +88,10 @@ class User(AbstractUser):
     class Meta:
         verbose_name = '사용자'
         verbose_name_plural = f'{verbose_name} 목록'
+
+    @property
+    def token(self):
+        return Token.objects.get_or_create(user=self)[0].key
 
 
 class Relation(models.Model):

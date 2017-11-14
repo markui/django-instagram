@@ -1,10 +1,7 @@
 from django import forms
+from django.contrib.auth import get_user_model, authenticate, login as django_login
 # from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from django.http import HttpResponse
-
-from .validators import validate_username
-from django.contrib.auth import get_user_model, authenticate, login as django_login
 
 User = get_user_model()
 
