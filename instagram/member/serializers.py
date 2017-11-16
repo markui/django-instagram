@@ -1,7 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.views import View
 from rest_framework import serializers
-from rest_framework.authtoken.models import Token
 
 User = get_user_model()
 
@@ -19,7 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class SignupSerializer(serializers.ModelSerializer):
-#     token = serializers.SerializerMethodField()
+    #     token = serializers.SerializerMethodField()
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
 
@@ -48,6 +46,7 @@ class SignupSerializer(serializers.ModelSerializer):
             password=validated_data['password1'],
             img_profile=validated_data['img_profile'],
         )
+
     # read, 즉 serialize를 할 경우에만 사용되는 SerializerMethodField
     # obj: serializer.save()로 만들어진 user instance가 온다
     # def get_token(self, obj):
@@ -58,7 +57,7 @@ class SignupSerializer(serializers.ModelSerializer):
         # serializer된 형태를 결정
         # super().to_representation()은 serialize된 기본 형태(dict)
         # token도 추가
-        # 형태를ㄹ 바꿔 주는 것
+        # 형태를 바꿔 주는 것
         ret = super().to_representation(instance)
         data = {
             'user': ret,
@@ -66,6 +65,3 @@ class SignupSerializer(serializers.ModelSerializer):
         }
         # 마지막엔 serializer.data를 출력했을 때 반환될 값을 반환해줘야 함
         return data
-
-
-

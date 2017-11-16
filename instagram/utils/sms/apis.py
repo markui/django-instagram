@@ -1,7 +1,5 @@
 from rest_framework.views import APIView
-import sys
-from sdk.api.message import Message
-from sdk.exceptions import CoolsmsException
+
 """
 class SMSSerializer
     receiver에 휴대전화 형식의 데이터가 왔는지 validate
@@ -11,6 +9,7 @@ class SMSSerializer
         serializer.data에 있는 내용을 이용해서 send 처리
 
 """
+
 
 class SendSMS(APIView):
     def post(self, request):

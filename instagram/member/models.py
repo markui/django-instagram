@@ -5,7 +5,6 @@ from django.contrib.auth.models import (
 )
 from django.db import models
 
-
 # class UserManager(DjangoUserManager):
 #     def create_superuser(self, *args, **kwargs):
 #         return super().create_superuser(age=30, *args, **kwargs)
@@ -89,6 +88,7 @@ class User(AbstractUser):
         verbose_name = '사용자'
         verbose_name_plural = f'{verbose_name} 목록'
 
+    # token을 생성해주기 위해서
     @property
     def token(self):
         return Token.objects.get_or_create(user=self)[0].key
