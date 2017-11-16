@@ -47,12 +47,13 @@ FACEBOOK_SCOPE = ['user_friends', 'public_profile', 'email']
 STATIC_URL = '/static/'
 # instagram_project/instagram/static => 이는 custom 변수이고
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 # STATIC_URL로의 요청은 STATICFILES_DIRS 경로의 목록에서 파일을 찾아 리턴
 STATICFILES_DIRS = [
     STATIC_DIR,
 ]
 # instagram_project/instagram/media/ => 이는 django 내부에서 사용하는 변수
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, '.media')
 MEDIA_URL = '/media/'
 # instagram_project/instagram/templates
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
@@ -115,6 +116,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# CORS
+CORS_ORIGIN_WHITELIST = (
+    'localhost:3001',
+)
+
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
@@ -140,7 +146,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = config_secret_common['django']['databases']
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

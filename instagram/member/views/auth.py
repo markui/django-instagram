@@ -40,7 +40,7 @@ def signup(request):
             # user = form.signup()
             user = form.save()
             # 회원가입이 완료된 후 해당 유저를 login 시킴
-            django_login(request, user)
+            django_login(request, user, backend='django.contrib.auth.backends.ModelBackend')
             return redirect('post:list')
 
     else:
