@@ -2,6 +2,7 @@ FROM        viking617/base
 MAINTAINER  viking617617@gmail.com
 
 ENV         LANG C.UTF-8
+#ENV         DJANGO_SETTINGS_MODULE config.settings
 
 # 파일 복사 및 requirements 설치
 COPY        . /srv/app
