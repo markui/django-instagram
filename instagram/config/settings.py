@@ -43,6 +43,11 @@ FACEBOOK_APP_ID = config_secret_common['facebook']['app_id']
 FACEBOOK_APP_SECRET_CODE = config_secret_common['facebook']['secret_code']
 FACEBOOK_SCOPE = ['user_friends', 'public_profile', 'email']
 
+# CoolSMS
+
+
+
+
 # static의 경우 url부분에서 STATIC_URL, STATICFILES_DIRS가 생략되어있다고 생각하면 됨
 STATIC_URL = '/static/'
 # instagram_project/instagram/static => 이는 custom 변수이고
@@ -70,7 +75,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '.elasticbeanstalk.com',
-    'djangstagram.com',
+    '.djangstagram.com',
 ]
 
 # Application definition
