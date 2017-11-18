@@ -141,7 +141,8 @@ class FacebookLogin(APIView):
             raise APIException('페이스북 토큰의 사용자와 전달받은 facebook_user_id가 일치하지 않음')
 
         if not debug_token_info.is_valid:
-            raise APIException('페이스북 토큰이 유효하지 않음')
+            raise APIException('페이스북 토큰이 유효하지 않'
+                               '음')
 
         # FacebookBackend를 사용해서 유저 인증
         user = authenticate(facebook_user_id=request.data['facebook_user_id'])

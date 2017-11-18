@@ -9,7 +9,7 @@ class FacebookBackend:
             return User.objects.get(username=f'fb_{facebook_user_id}')
         except User.DoesNotExist:
             return None
-
+    # 필수
     def get_user(self, user_id):
         try:
             return User.objects.get(pk=user_id)

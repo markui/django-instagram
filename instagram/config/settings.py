@@ -58,7 +58,7 @@ STATICFILES_DIRS = [
     STATIC_DIR,
 ]
 # instagram_project/instagram/media/ => 이는 django 내부에서 사용하는 변수
-MEDIA_ROOT = os.path.join(BASE_DIR, '.media')
+MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 MEDIA_URL = '/media/'
 # instagram_project/instagram/templates
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
