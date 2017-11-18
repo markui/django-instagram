@@ -75,7 +75,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '.elasticbeanstalk.com',
-    '.djangstagram.com',
+    'api.djangstagram.com',
 ]
 
 # Application definition
