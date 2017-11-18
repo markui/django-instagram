@@ -1,8 +1,15 @@
+# Created by https://www.gitignore.io/api/linux,macos,python,django,pycharm
+
+
 # Custom
 .idea/
 .config_secret/
+.media/
 
-# Created by https://www.gitignore.io/api/linux,macos,python,django,pycharm
+
+# Front code
+front/
+
 
 ### Django ###
 *.log
@@ -233,3 +240,4 @@ venv.bak/
 
 # EB ignore original
 !.config_secret/
+!/front/
