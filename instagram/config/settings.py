@@ -75,6 +75,7 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '.elasticbeanstalk.com',
+    'front.localhost',
     'api.djangstagram.com',
 ]
 
@@ -128,9 +129,8 @@ MIDDLEWARE = [
 # CORS
 CORS_ORIGIN_WHITELIST = (
     'localhost:3001',
-    'front.localhost:3001',
+    'front.localhost:8013',
     'djangstagram.com',
-
 )
 
 ROOT_URLCONF = 'config.urls'
