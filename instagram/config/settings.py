@@ -128,6 +128,9 @@ MIDDLEWARE = [
 # CORS
 CORS_ORIGIN_WHITELIST = (
     'localhost:3001',
+    'front.localhost:3001',
+    'djangstagram.com',
+
 )
 
 ROOT_URLCONF = 'config.urls'
