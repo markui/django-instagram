@@ -75,7 +75,6 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'localhost',
     '.elasticbeanstalk.com',
-    'front.localhost',
     'api.djangstagram.com',
 ]
 
