@@ -91,7 +91,7 @@ def facebook_login(request):
     debug_token_info = get_debug_token_info(access_token)
     print(debug_token_info)
 
-    # 4. access token을 바탕으로, Grapth API에 유저정보 요청해서 가져오기
+    # 4. access token을 바탕으로, Graph API에 유저정보 요청해서 가져오기
     user_info_fields = [
         'id',
         'name',
