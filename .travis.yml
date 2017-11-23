@@ -1,14 +1,13 @@
 language: python
-
 python:
-  - 3.6
-
+- 3.6
 install:
-  - pip install -r requirements.txt
-
-
+- pip install -r requirements.txt
 before_script:
-  - cd instagram
-
+- cd instagram
 script:
-  - python manage.py test
+- python manage.py test
+before_install:
+- openssl aes-256-cbc -K $encrypted_eefa3d15f1c0_key -iv $encrypted_eefa3d15f1c0_iv
+  -in secrets.tar.enc -out secrets.tar -d
+- tar xvf secrets.tar
