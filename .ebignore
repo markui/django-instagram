@@ -7,11 +7,6 @@
 .media/
 
 
-
-# Travis CI
-secrets.tar
-
-
 # Front code
 /front/
 
@@ -241,3 +236,8 @@ venv.bak/
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+
+# EB ignore original
+!.config_secret/
+!/front/

@@ -1,4 +1,8 @@
+from rest_framework import status, serializers
+from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from .serializers import SMSSerializer
 
 """
 class SMSSerializer
@@ -20,4 +24,9 @@ class SendSMS(APIView):
 
         # /api/utils/sms/send/로 연결
         # postman작성
-        pass
+        serializer = SMSSerializer(request.data)
+        if serializer.is_valid():
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK)
+        return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -16,6 +16,8 @@ class UserSerializer(serializers.ModelSerializer):
         )
 
 
+
+
 class SignupSerializer(serializers.ModelSerializer):
     #     token = serializers.SerializerMethodField()
     password1 = serializers.CharField(write_only=True)

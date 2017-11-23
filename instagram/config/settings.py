@@ -43,16 +43,22 @@ FACEBOOK_APP_ID = config_secret_common['facebook']['app_id']
 FACEBOOK_APP_SECRET_CODE = config_secret_common['facebook']['secret_code']
 FACEBOOK_SCOPE = ['user_friends', 'public_profile', 'email']
 
+# CoolSMS
+
+
+
+
 # static의 경우 url부분에서 STATIC_URL, STATICFILES_DIRS가 생략되어있다고 생각하면 됨
 STATIC_URL = '/static/'
 # instagram_project/instagram/static => 이는 custom 변수이고
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(ROOT_DIR, '.static_root')
 # STATIC_URL로의 요청은 STATICFILES_DIRS 경로의 목록에서 파일을 찾아 리턴
 STATICFILES_DIRS = [
     STATIC_DIR,
 ]
 # instagram_project/instagram/media/ => 이는 django 내부에서 사용하는 변수
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(ROOT_DIR, '.media')
 MEDIA_URL = '/media/'
 # instagram_project/instagram/templates
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
@@ -66,7 +72,11 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '.elasticbeanstalk.com',
+    'api.djangstagram.com',
+]
 
 # Application definition
 
@@ -98,6 +108,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
 
     # Custom
     'member',
@@ -106,6 +117,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -114,6 +126,13 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# CORS
+CORS_ORIGIN_WHITELIST = (
+    'localhost:3001',
+    'front.localhost:8013',
+    'djangstagram.com',
+)
 
 ROOT_URLCONF = 'config.urls'
 
@@ -140,7 +159,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 
-DATABASES = config_secret_common['django']['databases']
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators

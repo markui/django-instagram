@@ -1,3 +1,4 @@
+from pprint import pprint
 from typing import NamedTuple
 
 import requests
@@ -28,7 +29,7 @@ class Login(APIView):
         password = request.data['password']
         print(password)
         # 전달받은 username, password값으로
-        # authenticate실행
+        # authenticate실행3
         user = authenticate(
             username=username,
             password=password
@@ -115,10 +116,16 @@ class FacebookLogin(APIView):
             application: str
             expires_at: int
             is_valid: bool
-            issued_at: int
+            # issued_at: int
             scopes: list
             type: str
             user_id: str
+
+        class UserInfo:
+            def __init__(self, data):
+                self.id = data['id']
+                self.email = data.get('email', '')
+                self.url_picture = data['picture']['data']['url']
 
         # token(access_token)을 받아 해당 토큰을 Debug
         def get_debug_token_info(token):
@@ -132,6 +139,7 @@ class FacebookLogin(APIView):
                 'access_token': app_access_token,
             }
             response = requests.get(url_debug_token, params_debug_token)
+            pprint(response.json())
             return DebugTokenInfo(**response.json()['data'])
 
         # request.data로 전달된 access_token값을 페이스북API쪽에 debug요청, 결과를 받아옴
@@ -141,12 +149,45 @@ class FacebookLogin(APIView):
             raise APIException('페이스북 토큰의 사용자와 전달받은 facebook_user_id가 일치하지 않음')
 
         if not debug_token_info.is_valid:
-            raise APIException('페이스북 토큰이 유효하지 않음')
+            raise APIException('페이스북 토큰이 유효하지 않'
+                               '음')
+
+        # access token을 바탕으로, Grapth API에 유저정보 요청해서 가져오기
+        user_info_fields = [
+            'id',
+            'name',
+            'picture',
+            'age_range',
+            'gender',
+            'email',
+
+            # 'hometown',
+            # 'education',
+            # 'work',
+            # 'location',
+            # 'birthday',
+            # 'friendlists'
+
+        ]
+
+        url_graph_user_info = 'https://graph.facebook.com/me'
+        params_graph_user_info = {
+            'fields': ','.join(user_info_fields),
+            'access_token': request.data['access_token'],
+        }
+
+        # 952446338209991?fields=birthday,age_range,education,devices,email,name,gender,hometown,location,work,website
+        # 952446338209991?fields = friendlists
+        response = requests.get(url_graph_user_info, params_graph_user_info)
+        result = response.json()
+        pprint(result)
+        # pprint(request.get('https://graph.facebook.com/952446338209991', ).json())
+
 
         # FacebookBackend를 사용해서 유저 인증
         user = authenticate(facebook_user_id=request.data['facebook_user_id'])
         # 인증에 실패한 경우 페이스북유저 타입으로 유저를 만들어줌
-        print(user)
+        # print(user)
         if not user:
             user = User.objects.create_user(
                 username=f'fb_{request.data["facebook_user_id"]}',

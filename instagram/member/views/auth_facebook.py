@@ -7,7 +7,7 @@ from django.conf import settings
 from django.contrib.auth import (
     get_user_model,
     login as django_login,
-)
+    authenticate)
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.urls import reverse
@@ -91,7 +91,7 @@ def facebook_login(request):
     debug_token_info = get_debug_token_info(access_token)
     print(debug_token_info)
 
-    # 4. access token을 바탕으로, Grapth API에 유저정보 요청해서 가져오기
+    # 4. access token을 바탕으로, Graph API에 유저정보 요청해서 가져오기
     user_info_fields = [
         'id',
         'name',
@@ -112,17 +112,15 @@ def facebook_login(request):
     #   fb_<facebook_user_id>
     username = f'fb_{user_info.id}'
     # 위 username에 해당하는 User가 있는지 검사
-    if User.objects.filter(username=username).exists():
-        # 있으면 user에 해당 유저를 할당
-        user = User.objects.get(username=username)
-    else:
-        # 없으면 user에 새로 만든 User를 할당
-        user = User.objects.create_user(
-            user_type=User.USER_TYPE_FACEBOOK,
-            username=username,
-            age=0
-        )
+    if not User.objects.filter(username=username).exists():
+        User.objects.create_user(
+                user_type=User.USER_TYPE_FACEBOOK,
+                username=username,
+            )
+
     # user를 로그인시키고 post_list페이지로 이동
+    # authenticate을 했으므로,
+    user = authenticate(facebook_user_id=user_info.id)
     django_login(request, user)
     return redirect('post:list')
 
